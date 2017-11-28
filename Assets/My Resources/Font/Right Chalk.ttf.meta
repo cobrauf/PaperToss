@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 07eb3fa287800c345b76dc1de6a852a5
+timeCreated: 1508520766
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Right Chalk
+  fontNames:
+  - Right Chalk
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

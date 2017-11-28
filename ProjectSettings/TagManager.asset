@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Score
+  - Floor
+  - Trash Can
+  - Kill Floor
+  - Fire
+  - Testing
+  - Hologram
+  - Unlockable 1
+  - Unlockable 2
+  - Unlockable 3
+  - Paperball
+  - Rubberduck
+  - Beer Can
+  - Unlockable 4
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Paper
+  - Trash Can
+  - Score
+  - Environment
+  - Trash Can RB
+  - PlaneVisualizer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0

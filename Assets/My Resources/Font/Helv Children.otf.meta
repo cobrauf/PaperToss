@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: ed8421ca570785e4097102eff8f0beb0
+timeCreated: 1507762418
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Helv Children
+  fontNames:
+  - Helv Children
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

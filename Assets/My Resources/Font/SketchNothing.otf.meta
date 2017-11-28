@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 1c4dfc5dc6a59774fbfbb86ac309bc35
+timeCreated: 1511061155
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Sketch Nothing
+  fontNames:
+  - Sketch Nothing
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
