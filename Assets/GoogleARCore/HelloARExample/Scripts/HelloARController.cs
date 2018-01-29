@@ -241,7 +241,7 @@ namespace GoogleARCore.HelloAR
 			TrackableHitFlag myRaycastFilter = TrackableHitFlag.PlaneWithinBounds | TrackableHitFlag.PlaneWithinPolygon;
 
             //if raycast hits plane, and we should show scene
-			if (Session.Raycast (myRay, myRaycastFilter, out myHit) && sceneUpdateCount > 5 && shouldShowSceneParent)
+            if (Session.Raycast (myRay, myRaycastFilter, out myHit) && sceneUpdateCount > 10 && shouldShowSceneParent)
             {
                 //then pin the scene to the plane and set scene active
 				sceneUpdateCount = 0;
@@ -273,10 +273,10 @@ namespace GoogleARCore.HelloAR
                 sceneParent.GetComponent<PlaneAttachment>().Attach(myHit.Plane);
             }
             //but if raycast didn't hit
-            else if (sceneUpdateCount > 5 && shouldShowSceneParent)
+            else if (sceneUpdateCount > 10 && shouldShowSceneParent)
             {
                 //set scene inactive
-				sceneUpdateCount = 0;
+                sceneUpdateCount = 0;
                 if (sceneParent.activeInHierarchy)
                 {
                     sceneParent.SetActive(false);
