@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PSManager : MonoBehaviour {
+public class PSManager : MonoBehaviour
+{
 
     public static PSManager instance;
 
@@ -24,7 +25,7 @@ public class PSManager : MonoBehaviour {
 
     [Header("Wind Splash Positions")]
     public Transform windSplashPosRight;
-    public Transform windSplashPosLeft;    
+    public Transform windSplashPosLeft;
 
     [Header("Trash Can Fire")]
     public ParticleSystem trashFire;
@@ -38,14 +39,23 @@ public class PSManager : MonoBehaviour {
     public ParticleSystem[] miniFireArray;
     public ParticleSystem[] miniFireChild1Array;
     public ParticleSystem[] miniFireChild2Array;
+
     [Header("Mini Paper Ball Fire")]
     public ParticleSystem miniFire;
     public ParticleSystem miniFireChild1;
     public ParticleSystem miniFireChild2;
 
-    void Awake ()
+    void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
     }
 
     #region Events
@@ -59,51 +69,10 @@ public class PSManager : MonoBehaviour {
     {
         EventsManager.OnFireEvent -= PlayMiniFire;
         EventsManager.OnFireOffEvent -= StopMiniFire;
-    }   
-
+    }
     #endregion
 
-    public void PlayPaperSplashSmall ()
-    {
-        paperSplashSmall.Play();
-    }
-        
-    public void PlayPaperSplashPS()    {
-        //float adjustedWindForce = PaperBall.windForce * -2;
-
-        //var fol1 = paperSplashPSChild1.forceOverLifetime;
-        //var fol2 = paperSplashPSChild2.forceOverLifetime;
-        //var fol3 = paperSplashPSChild3.forceOverLifetime;
-
-        //fol1.x = fol2.x = fol3.x = adjustedWindForce;
-        paperSplashPS.Play();
-    }
-
-    public void PlayWindSplashPS ()
-    {
-        if (PaperBall.windForce < 0)
-        {
-            windSplashGO.transform.localPosition = windSplashPosRight.localPosition;
-        } else
-        {
-            windSplashGO.transform.localPosition = windSplashPosLeft.localPosition;
-        }
-
-        float adjustedWindForce = PaperBall.windForce * 2;
-
-        var vol1 = windSplashPSChild1.velocityOverLifetime;
-        var vol2 = windSplashPSChild2.velocityOverLifetime;
-        var vol3 = windSplashPSChild3.velocityOverLifetime;
-
-        vol1.x = vol2.x = vol3.x = adjustedWindForce;
-        windSplashPS.Play();
-    }
-
-    public void PlayDustPuffPS (Vector3 pos)
-    {
-        Instantiate(dustPuff, pos, Quaternion.LookRotation(Camera.main.transform.position));
-    }
-
+    //plays particle effect on mini ball according direction of wind blowing
     public void PlayMiniFire()
     {
         var vol = miniFireChild1.velocityOverLifetime;
@@ -118,7 +87,8 @@ public class PSManager : MonoBehaviour {
         {
             vol.x = 0.05f;
             fol.x = 0.2f;
-        } else
+        }
+        else
         {
             vol.x = 0f;
             fol.x = 0f;
@@ -127,14 +97,53 @@ public class PSManager : MonoBehaviour {
         miniFire.Play();
     }
 
+    //stops particle effect on mini ball
     void StopMiniFire()
     {
         miniFire.Stop();
     }
 
-    public void PlayTrashCanFire ()
+    public void PlayPaperSplashSmall()
     {
-       // var vol1 = trashFireChild1.velocityOverLifetime;//doesn't look good
+        paperSplashSmall.Play();
+    }
+
+    public void PlayPaperSplashPS()
+    {
+        paperSplashPS.Play();
+    }
+
+    //plays paper splash effect according to wind direction and force
+    public void PlayWindSplashPS()
+    {
+        if (PaperBall.windForce < 0)
+        {
+            windSplashGO.transform.localPosition = windSplashPosRight.localPosition;
+        }
+        else
+        {
+            windSplashGO.transform.localPosition = windSplashPosLeft.localPosition;
+        }
+
+        float adjustedWindForce = PaperBall.windForce * 2;
+
+        var vol1 = windSplashPSChild1.velocityOverLifetime;
+        var vol2 = windSplashPSChild2.velocityOverLifetime;
+        var vol3 = windSplashPSChild3.velocityOverLifetime;
+
+        vol1.x = vol2.x = vol3.x = adjustedWindForce;
+        windSplashPS.Play();
+    }
+
+    //plays dust puff effect where ball hits floor
+    public void PlayDustPuffPS(Vector3 pos)
+    {
+        Instantiate(dustPuff, pos, Quaternion.LookRotation(Camera.main.transform.position));
+    }
+
+    //plays trash fire effect according to wind direction
+    public void PlayTrashCanFire()
+    {
         var vol2 = trashFireChild2.velocityOverLifetime;
         var vol3 = trashFireChild3.velocityOverLifetime;
         var fol4 = trashFireChild4.forceOverLifetime;
@@ -149,21 +158,13 @@ public class PSManager : MonoBehaviour {
         {
             vol2.x = vol3.x = -0.3f;
             fol4.x = fol5.x = -0.3f;
-        } else
+        }
+        else
         {
             vol2.x = vol3.x = fol4.x = fol5.x = 0f;
         }
 
         trashFire.Play();
-    }
-
-    void Update ()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            PlayTrashCanFire();
-        }
-    }
-
+    }  
 
 }

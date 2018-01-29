@@ -4,62 +4,75 @@ using UnityEngine;
 using GoogleARCore.HelloAR;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
-	public static GameManager instance;
+    public static GameManager instance;
 
     #region Variables
-    //object references
     public Light sceneLight;
-    public bool scenePlaced, gameStarted, inPlayMode;
+    public bool scenePlaced;
+    public bool gameStarted;
+    public bool inPlayMode;
+
+    //difficulty, score related
     public enum Difficulty { Easy, Hard };
     public static Difficulty gameMode = Difficulty.Easy;
-    public static int score, endDisplayScore, currentMissCount, chainCount;
+    public static int score; 
+    public static int endDisplayScore;
+    public static int currentMissCount;
+    public static int chainCount;
     public static bool isOnFire;
+    private int lightUpdateCount;
+    private const int NUM_MISSES_ALLOWED = 5;
 
     //fan speed levels
     public static int fanLevel1Threshold = 3;
     public static int fanLevel2Threshold = 6;
-    public static int fanLevel3Threshold = 9;
-
-    private int lightUpdateCount;
-    private const int NUM_MISSES_ALLOWED = 5;
+    public static int fanLevel3Threshold = 9;    
     private bool fanTurnedOn;
     #endregion
 
 
-    void Awake () {
-		if (instance == null) {
-			instance = this;
-		} else if (instance != this) {
-			Destroy (gameObject);
-		}
-		DontDestroyOnLoad (gameObject);
-	}	
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+    }
 
-	#region Events
-	void OnEnable () {		
-		EventsManager.OnScenePlacedEvent += ScenePlacedActions;
-		EventsManager.OnPlayModeEnterEvent += PlayModeEnterActions;
-		EventsManager.OnPlayModeExitEvent += PlayModeExitActions;
-		EventsManager.OnGameStartEvent += GameStartActions;
-		EventsManager.OnGameOverEvent += GameOverActions;
-		EventsManager.OnGameResetEvent += GameResetActions;
-		EventsManager.OnSceneResetEvent += SceneResetActions;
-	}
+    #region Events
+    void OnEnable()
+    {
+        EventsManager.OnScenePlacedEvent += ScenePlacedActions;
+        EventsManager.OnPlayModeEnterEvent += PlayModeEnterActions;
+        EventsManager.OnPlayModeExitEvent += PlayModeExitActions;
+        EventsManager.OnGameStartEvent += GameStartActions;
+        EventsManager.OnGameOverEvent += GameOverActions;
+        EventsManager.OnGameResetEvent += GameResetActions;
+        EventsManager.OnSceneResetEvent += SceneResetActions;
+    }
 
-	void OnDisable () {
-		EventsManager.OnScenePlacedEvent -= ScenePlacedActions;
-		EventsManager.OnPlayModeEnterEvent -= PlayModeEnterActions;
-		EventsManager.OnPlayModeExitEvent -= PlayModeExitActions;
-		EventsManager.OnGameStartEvent -= GameStartActions;
-		EventsManager.OnGameOverEvent -= GameOverActions;
-		EventsManager.OnGameResetEvent -= GameResetActions;
-		EventsManager.OnSceneResetEvent -= SceneResetActions;
-	}
+    void OnDisable()
+    {
+        EventsManager.OnScenePlacedEvent -= ScenePlacedActions;
+        EventsManager.OnPlayModeEnterEvent -= PlayModeEnterActions;
+        EventsManager.OnPlayModeExitEvent -= PlayModeExitActions;
+        EventsManager.OnGameStartEvent -= GameStartActions;
+        EventsManager.OnGameOverEvent -= GameOverActions;
+        EventsManager.OnGameResetEvent -= GameResetActions;
+        EventsManager.OnSceneResetEvent -= SceneResetActions;
+    }
 
-	void ScenePlacedActions() {
-		scenePlaced = true;
+    void ScenePlacedActions()
+    {
+        scenePlaced = true;
         currentMissCount = NUM_MISSES_ALLOWED;
         score = 0;
         chainCount = 0;
@@ -76,35 +89,38 @@ public class GameManager : MonoBehaviour {
     }
 
     void GameStartActions()
-	{
-		gameStarted = true;
+    {
+        gameStarted = true;
         score = 0;
         chainCount = 0;
         endDisplayScore = 0;
         fanTurnedOn = false;
     }
 
-    void GameOverActions () {
-		gameStarted = false;
+    void GameOverActions()
+    {
+        gameStarted = false;
         fanTurnedOn = false;
         chainCount = 0;
     }
 
-    void GameResetActions ()
+    void GameResetActions()
     {
         currentMissCount = NUM_MISSES_ALLOWED;
         fanTurnedOn = false;
-    }   
+    }
 
-	void SceneResetActions () {
-		gameStarted = false;
-		scenePlaced = false;
+    void SceneResetActions()
+    {
+        gameStarted = false;
+        scenePlaced = false;
         isOnFire = false;
         chainCount = 0;
-	}
-	#endregion
+    }
+    #endregion
 
-	void Update () {
+    void Update()
+    {
 
         //adjust light source intensity according to global light estimation       
         if (lightUpdateCount++ > 60f)
@@ -127,13 +143,13 @@ public class GameManager : MonoBehaviour {
         }
 
         //turn on fire mode
-        if (chainCount >=3 && !isOnFire)
+        if (chainCount >= 3 && !isOnFire)
         {
             EventsManager.OnFire();
             isOnFire = true;
         }
 
-        #region Testing----------------------
+        #region keyboard testing----------------------
         if (Input.GetKeyDown(KeyCode.G))
         {
             EventsManager.GameOver();
@@ -169,17 +185,19 @@ public class GameManager : MonoBehaviour {
         if (isOnFire)
         {
             score += 2;
-        } else
+        }
+        else
         {
             score++;
         }
+
         endDisplayScore = score;
         InGameMenuManager.instance.Scored();
         chainCount++;
         InGameMenuManager.instance.TriggerChainTextAnim();
     }
 
-    public void RegisterMiss ()
+    public void RegisterMiss()
     {
         currentMissCount--;
         SoundManager.instance.PlayMissSFX();
@@ -192,16 +210,10 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void OnFireTest ()
+    public void OnFireTest()
     {
         EventsManager.OnFire();
         isOnFire = true;
-    }
-
-    public void tenTest()
-    {
-        score += 10;
-        endDisplayScore += 10;
-    }
+    }    
 
 }

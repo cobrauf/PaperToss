@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrashCanRB : MonoBehaviour {
+public class TrashCanRB : MonoBehaviour
+{
 
     public Transform DropPos;
-    private Quaternion initialRotation;
 
+    private Quaternion initialRotation;
     private Vector3 initialPos;
     private Rigidbody rb;
     private Collider rbCol;
     private float timer;
-    private bool initialPSPlayed, justGotHit;
+    private bool initialPSPlayed;
+    private bool justGotHit;
     private const float ROTATION_THRESHOLD = 10f;
     private const float POSITION_THRESHOLD = 0.01f;
 
 
-
-    void Start () {
+    void Start()
+    {
         rb = GetComponent<Rigidbody>();
         rbCol = GetComponent<Collider>();
         initialRotation = transform.localRotation;
@@ -26,19 +28,15 @@ public class TrashCanRB : MonoBehaviour {
 
     #region Events
     void OnEnable()
-    {        
+    {
         EventsManager.OnScenePlacedEvent += DropCan;
         EventsManager.OnGameResetEvent += DropCan;
-        EventsManager.OnGameStartEvent += ResetVariable;
-
     }
 
     void OnDisable()
-    {        
+    {
         EventsManager.OnScenePlacedEvent -= DropCan;
         EventsManager.OnGameResetEvent -= DropCan;
-        EventsManager.OnGameStartEvent -= ResetVariable;
-
     }
 
     void DropCan()
@@ -47,16 +45,10 @@ public class TrashCanRB : MonoBehaviour {
         timer = 0f;
         initialPSPlayed = false;
     }
+    #endregion
 
-    void ResetVariable ()
+    void Update()
     {
-        //justGotHit = false;
-        //rbCol.enabled = true;
-        //rb.useGravity = true;
-    }
-#endregion
-
-    void Update () {
         timer += Time.deltaTime;
 
         //clamps trash can to upright rotation but allow some movement
@@ -68,6 +60,7 @@ public class TrashCanRB : MonoBehaviour {
         {
             transform.localRotation = initialRotation;
         }
+
         //clamps trash can to initial position
         if (transform.localPosition.x > POSITION_THRESHOLD || transform.localEulerAngles.x < -POSITION_THRESHOLD)
         {
@@ -82,16 +75,6 @@ public class TrashCanRB : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        //add a cooldown to being hit by ball
-        //if (col.gameObject.layer == 8 && !justGotHit)
-        //{
-        //    justGotHit = true;
-        //    rbCol.enabled = false;
-        //    rb.useGravity = false;
-        //    rb.isKinematic = true;
-        //    StartCoroutine(CoolDownCR());
-        //}
-
         //for initial drop-------------
         if (timer > 2f)
         {
@@ -103,17 +86,7 @@ public class TrashCanRB : MonoBehaviour {
             PSManager.instance.PlayPaperSplashSmall();
         }
 
-        SoundManager.instance.PlayTrashHit(rb.velocity.magnitude * 5f);          
-        
-    }
+        SoundManager.instance.PlayTrashHit(rb.velocity.magnitude * 5f);
 
-    //IEnumerator CoolDownCR()
-    //{
-    //    yield return new WaitForSeconds(1f);
-    //    justGotHit = false;
-    //    rbCol.enabled = true;
-    //    rb.useGravity = true;
-    //    rb.isKinematic = false;
-
-    //}
+    }   
 }

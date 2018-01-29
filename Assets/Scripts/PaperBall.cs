@@ -5,19 +5,20 @@ using UnityEngine;
 public class PaperBall : MonoBehaviour
 {
 
-    //public PaperShadow _paperShadow;
     public ParticleSystem fire;
+    public bool hasScored;
+    public static float windForce;
 
     private Rigidbody ballRB;
     private MeshCollider meshCol;
     private BoxCollider boxCol;
-    public bool hasScored;
-    private bool missRegistered, CRfired, dustPlayed;
+
+    private bool missRegistered;
+    private bool CRfired;
+    private bool dustPlayed;
     private float timer = 0f;
     private Color currentPaperColor;
     private Renderer paperRend;
-
-    public static float windForce;
 
     void Start()
     {
@@ -70,7 +71,8 @@ public class PaperBall : MonoBehaviour
             StartCoroutine(ChangePaperBallColor());
         }
 
-        if (col.gameObject.layer == 12)//if hit trash can RB, disable collision 
+        //if hit trash can RB, disable collision 
+        if (col.gameObject.layer == 12)
         {
             ballRB.isKinematic = true;
             ballRB.detectCollisions = false;
@@ -79,6 +81,7 @@ public class PaperBall : MonoBehaviour
             boxCol.enabled = false;
         }
 
+        //play trash can SFX
         if (col.gameObject.CompareTag("Trash Can"))
         {
             SoundManager.instance.PlayTrashHit(ballRB.velocity.magnitude);
@@ -86,6 +89,7 @@ public class PaperBall : MonoBehaviour
             return;
         }
 
+        //play floor sound and dust puff
         if (col.gameObject.CompareTag("Floor"))
         {
             if (!missRegistered && !hasScored)
@@ -102,6 +106,7 @@ public class PaperBall : MonoBehaviour
         PlayObjSFX();
     }
 
+    //play sound according to ball object launched
     void PlayObjSFX()
     {
         switch (tag)
